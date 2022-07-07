@@ -54,6 +54,19 @@ jobs:
         sudo mkdir -p /workdir
         sudo chown $USER:$GROUPS /workdir
 
+    - name: install ccache
+      run: |
+        sudo -E apt-get -qq install ccache
+        echo \#ccache >> ~/.bashrc
+        echo export CCACHE_DIR="/home/.ccache" >> ~/.bashrc
+        echo export CC="ccache gcc" >> ~/.bashrc
+        echo export CXX="ccache g++" >> ~/.bashrc
+        echo export PATH="/usr/lib/ccache:\$PATH" >> ~/.bashrc 
+        source ~/.bashrc
+        ccache -M 6G
+        tail ~/.bashrc
+        # watch -n1 -d ccache -s
+
     - name: Clone source code
       working-directory: /workdir
       run: |
